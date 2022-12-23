@@ -5,7 +5,6 @@ namespace Scarecrow
 {
     class PickingUp : Toggleable
     {
-        static int _pickups;
         Pickup _current;
         [SerializeField] bool _debug;
         [SerializeField] LayerMask _pickupLayer;
@@ -15,12 +14,6 @@ namespace Scarecrow
         [SerializeField] UnityEvent _onHover;
         [SerializeField] UnityEvent _onPickUp;
         [SerializeField] UnityEvent _onLastPickup;
-
-        protected override void Start()
-        {
-            base.Start();
-            _pickups++;
-        }
 
         void OnDrawGizmos()
         {
@@ -42,8 +35,8 @@ namespace Scarecrow
                     {
                         _onPickUp?.Invoke();
                         _current.Take();
-                        _pickups--;
-                        if (_pickups == 0)
+                        Pickup.Amount--;
+                        if (Pickup.Amount == 0)
                         {
                             _onLastPickup.Invoke();
                         }
