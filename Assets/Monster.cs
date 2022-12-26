@@ -67,6 +67,7 @@ namespace Scarecrow
                         if (hit.collider.CompareTag("Player"))
                         {
                             var dot = Vector3.Dot(hit.collider.transform.forward, (transform.position - hit.collider.transform.position).normalized);
+                            print(dot);
                             if (dot >= _isFacingThreshold)
                                 _onPlayerSee.Invoke();
                             _animator.SetBool(_chase, true);

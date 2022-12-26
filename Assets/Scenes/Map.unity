@@ -43515,7 +43515,7 @@ MonoBehaviour:
   _spawnYPos: -0.11
   _findPlayerCutoff: 15
   _killDistance: 6
-  _isFacingThreshold: 0.7
+  _isFacingThreshold: 0.4
 --- !u!195 &5866666020212977967
 NavMeshAgent:
   m_ObjectHideFlags: 0
