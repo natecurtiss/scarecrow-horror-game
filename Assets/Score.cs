@@ -16,9 +16,8 @@ namespace Scarecrow
             yield return null;
             _total = Pickup.Amount;
             _text.text = $"0/{_total}";
-            print(Pickup.Amount);
         }
 
-        public void Add() => _text.text = $"{_total - Pickup.Amount}/{_total}";
+        void Update() => _text.text = $"{_total - Pickup.Amount}/{_total}";
     }
 }

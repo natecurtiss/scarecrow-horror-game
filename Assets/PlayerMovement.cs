@@ -10,6 +10,7 @@ namespace Scarecrow
         CharacterController _controller;
         float _xRotation;
         float _yRotation;
+        bool _isBreathing = false;
 
         [SerializeField] float _moveSpeed = 10f;
         [SerializeField] float _lookSensitivity = 100f;
@@ -35,10 +36,16 @@ namespace Scarecrow
         void Move()
         {
             var input = new Vector3(GetAxisRaw("Horizontal"), 0, GetAxisRaw("Vertical")).normalized;
-            if (input == Vector3.zero)
+            if (input == Vector3.zero && !_isBreathing)
+            {
                 _onBreathe.Invoke();
-            else
+                _isBreathing = true;
+            }
+            else if (input != Vector3.zero && _isBreathing)
+            {
                 _onWalk.Invoke();
+                _isBreathing = false;
+            }
             var rot = Quaternion.Euler(0, _camera.eulerAngles.y, 0);
             var move = rot * (input * (_moveSpeed * deltaTime));
             _controller.Move(move);

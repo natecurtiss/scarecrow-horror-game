@@ -17,6 +17,8 @@ namespace Scarecrow
         float _patrolSpeed;
 
         [SerializeField] UnityEvent _onKill;
+        [SerializeField] UnityEvent _onPlayerSee;
+        [SerializeField] UnityEvent _onPlayerLost;
         [SerializeField] PlayerMovement _player;
         [SerializeField] float _chaseSpeed;
         [SerializeField] float _transitionSpeed = 0.6f;
@@ -27,6 +29,7 @@ namespace Scarecrow
         [SerializeField] float _spawnYPos = -0.11f;
         [SerializeField] float _findPlayerCutoff = 15f;
         [SerializeField] float _killDistance = 5f;
+        [SerializeField] float _isFacingThreshold = 0.7f;
 
         void Awake()
         {
@@ -63,6 +66,9 @@ namespace Scarecrow
                     if (Physics.Raycast(transform.position, dir, out var hit, _startChaseDistance))
                         if (hit.collider.CompareTag("Player"))
                         {
+                            var dot = Vector3.Dot(hit.collider.transform.forward, (transform.position - hit.collider.transform.position).normalized);
+                            if (dot >= _isFacingThreshold)
+                                _onPlayerSee.Invoke();
                             _animator.SetBool(_chase, true);
                             DOTween.To(() => _agent.speed, s => _agent.speed = s, _chaseSpeed, _transitionSpeed);
                             _state = State.Chase;
@@ -79,6 +85,7 @@ namespace Scarecrow
                 {
                     _state = State.Patrol;
                     _animator.SetBool(_chase, false);
+                    _onPlayerLost.Invoke();
                     DOTween.To(() => _agent.speed, s => _agent.speed = s, _patrolSpeed, _transitionSpeed);
                 }
             }
